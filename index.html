@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthGrow — Demo Dashboard</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+}
+
+:root{
+  --bg:#070d18;
+  --card:#101b2d;
+  --card2:#16243a;
+  --line:#223450;
+  --accent:#34d399;
+  --blue:#38bdf8;
+  --gold:#fbbf24;
+  --text:#edf5ff;
+  --muted:#8da2c4;
+  --danger:#f87171;
+}
+
+body{
+  background:#050a12;
+  color:var(--text);
+  min-height:100vh;
+}
+
+button{
+  font-family:inherit;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:0 auto;
+  background:
+    radial-gradient(circle at 90% 0%,#12315c33 0,transparent 32%),
+    linear-gradient(180deg,#0b1528 0%,#070d18 100%);
+  padding-bottom:92px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* DEMO BANNER */
+.demo-banner{
+  background:repeating-linear-gradient(
+    45deg,
+    #7c2d12,
+    #7c2d12 12px,
+    #9a3412 12px,
+    #9a3412 24px
+  );
+  color:#fff;
+  text-align:center;
+  font-size:11px;
+  font-weight:800;
+  padding:7px 10px;
+  letter-spacing:.35px;
+}
+
+/* HEADER */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 18px 8px;
+}
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:#06281c;
+  box-shadow:0 7px 22px #34d39922;
+}
+
+header h2{
+  font-size:16px;
+  line-height:1.2;
+}
+
+header p{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+.bell{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#111d30;
+  border:1px solid var(--line);
+  border-radius:14px;
+  font-size:19px;
+  cursor:pointer;
+}
+
+/* BALANCE */
+.balance-card{
+  margin:14px 16px 13px;
+  padding:21px;
+  border-radius:23px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 100% 0%,#34d39944 0,transparent 40%),
+    linear-gradient(135deg,#103f3a,#075f4a 58%,#08766c);
+  border:1px solid #34d39955;
+  box-shadow:0 18px 45px #0008;
+}
+
+.balance-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.balance-label{
+  color:#a7f3d0;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.8px;
+}
+
+.eye{
+  border:0;
+  background:#ffffff12;
+  color:#d1fae5;
+  border-radius:9px;
+  width:29px;
+  height:29px;
+  cursor:pointer;
+}
+
+.balance-card h1{
+  font-size:33px;
+  letter-spacing:-.8px;
+  margin:7px 0 2px;
+}
+
+.balance-card .sub{
+  color:#a7f3d0;
+  font-size:11px;
+}
+
+.bal-btns{
+  display:flex;
+  gap:10px;
+  margin-top:17px;
+}
+
+.bal-btns button{
+  flex:1;
+  padding:12px;
+  border-radius:13px;
+  border:none;
+  font-weight:800;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.btn-dep{
+  background:#ecfdf5;
+  color:#065f46;
+}
+
+.btn-wd{
+  background:#064e3b99;
+  color:#d1fae5;
+  border:1px solid #34d39966!important;
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:0 16px 14px;
+}
+
+.stat{
+  background:linear-gradient(145deg,#101c2f,#0d1728);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.stat-value{
+  font-size:17px;
+  font-weight:800;
+  margin-top:6px;
+}
+
+.stat-value.green{
+  color:var(--accent);
+}
+
+/* SECTION */
+.section{
+  margin:14px 16px;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.section-head h3{
+  font-size:15px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* ACTIVE INVESTMENT */
+.invest-card{
+  background:
+    radial-gradient(circle at 100% 0%,#38bdf822,transparent 38%),
+    linear-gradient(145deg,#121f34,#0e1829);
+  border:1px solid var(--line);
+  border-radius:19px;
+  padding:17px;
+}
+
+.invest-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+}
+
+.invest-title{
+  font-size:15px;
+  font-weight:800;
+}
+
+.invest-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.active-badge{
+  background:#064e3b;
+  color:#6ee7b7;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.invest-money{
+  margin-top:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+}
+
+.invest-money b{
+  font-size:21px;
+}
+
+.invest-money small{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.progress{
+  height:7px;
+  border-radius:20px;
+  background:#1e2b40;
+  overflow:hidden;
+  margin:12px 0 7px;
+}
+
+.progress span{
+  display:block;
+  width:71%;
+  height:100%;
+  border-radius:20px;
+  background:linear-gradient(90deg,var(--accent),var(--blue));
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.invest-bottom{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+.invest-mini{
+  background:#16243a;
+  border-radius:12px;
+  padding:10px;
+}
+
+.invest-mini small{
+  color:var(--muted);
+  font-size:9px;
+  display:block;
+}
+
+.invest-mini b{
+  display:block;
+  margin-top:3px;
+  font-size:12px;
+}
+
+.view-invest{
+  width:100%;
+  border:0;
+  background:linear-gradient(90deg,var(--accent),var(--blue));
+  color:#052e22;
+  border-radius:12px;
+  padding:11px;
+  margin-top:12px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* QUICK ACTIONS */
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+}
+
+.quick{
+  min-width:0;
+  text-align:center;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:11px 3px;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.quick:active{
+  transform:scale(.95);
+}
+
+.quick .ic{
+  font-size:20px;
+}
+
+.quick p{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:5px;
+}
+
+/* ACTIVITY */
+.activity-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.activity{
+  display:flex;
+  align-items:center;
+  padding:13px 14px;
+  border-bottom:1px solid var(--line);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:35px;
+  height:35px;
+  border-radius:11px;
+  background:#16243a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-right:10px;
+}
+
+.activity-info{
+  flex:1;
+}
+
+.activity-info b{
+  font-size:12px;
+}
+
+.activity-info small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+.activity-amount{
+  text-align:right;
+}
+
+.activity-amount b{
+  font-size:12px;
+}
+
+.activity-amount small{
+  display:block;
+  margin-top:3px;
+  font-size:9px;
+}
+
+.pos{
+  color:var(--accent);
+}
+
+.pending{
+  color:var(--gold);
+}
+
+/* INVITE */
+.invite{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  background:
+    radial-gradient(circle at 100% 0%,#fbbf2433,transparent 40%),
+    linear-gradient(90deg,#3a2209,#5c350b);
+  border:1px solid #fbbf2444;
+  border-radius:18px;
+  margin:14px 16px;
+  padding:15px;
+}
+
+.invite .gift{
+  font-size:27px;
+}
+
+.invite-text{
+  flex:1;
+}
+
+.invite b{
+  font-size:13px;
+}
+
+.invite small{
+  color:#fde68a;
+  font-size:9px;
+  display:block;
+  margin-top:3px;
+}
+
+.invite button{
+  background:var(--gold);
+  color:#451a03;
+  border:none;
+  padding:9px 12px;
+  border-radius:11px;
+  font-weight:900;
+  font-size:10px;
+  cursor:pointer;
+}
+
+/* PLANS LINK */
+.plans-link{
+  margin:14px 16px;
+  padding:15px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.plans-link strong{
+  font-size:13px;
+}
+
+.plans-link small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-top:3px;
+}
+
+.plans-link button{
+  border:0;
+  background:#163c36;
+  color:#6ee7b7;
+  padding:9px 11px;
+  border-radius:10px;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+/* BOTTOM NAV */
+nav.bottom{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  background:#0b1424ee;
+  backdrop-filter:blur(15px);
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-around;
+  padding:8px 3px 11px;
+  z-index:10;
+}
+
+nav.bottom button{
+  flex:1;
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:9px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  cursor:pointer;
+  padding:3px 2px;
+}
+
+nav.bottom button .ic{
+  font-size:19px;
+}
+
+nav.bottom button.active{
+  color:var(--accent);
+}
+
+/* OTHER PAGES */
+.page{
+  display:none;
+  animation:fade .2s;
+}
+
+.page.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.plan{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  margin:12px 16px;
+  padding:18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.plan .tag{
+  position:absolute;
+  top:14px;
+  right:-32px;
+  transform:rotate(38deg);
+  background:var(--gold);
+  color:#451a03;
+  font-size:10px;
+  font-weight:800;
+  padding:4px 36px;
+}
+
+.plan h4{
+  font-size:17px;
+  margin-bottom:4px;
+}
+
+.plan .price{
+  color:var(--accent);
+  font-size:22px;
+  font-weight:800;
+}
+
+.plan ul{
+  list-style:none;
+  margin:10px 0 14px;
+}
+
+.plan li{
+  font-size:12px;
+  color:var(--muted);
+  padding:4px 0;
+}
+
+.plan li::before{
+  content:"✓ ";
+  color:var(--accent);
+  font-weight:700;
+}
+
+.plan button{
+  width:100%;
+  background:linear-gradient(90deg,var(--accent),var(--blue));
+  color:#052e22;
+  border:none;
+  padding:12px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  margin:12px 16px;
+  padding:16px;
+}
+
+.card h3{
+  font-size:15px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.sum-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.sum-item{
+  background:var(--card2);
+  border-radius:14px;
+  padding:12px 8px;
+  text-align:center;
+}
+
+.sum-item .ic{
+  font-size:18px;
+}
+
+.sum-item small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin:5px 0 3px;
+}
+
+.sum-item b{
+  font-size:14px;
+  color:var(--accent);
+}
+
+.menu-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 4px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  cursor:pointer;
+}
+
+.menu-item:last-child{
+  border:none;
+}
+
+.menu-item .arr{
+  margin-left:auto;
+  color:var(--muted);
+}
+
+.prof-head{
+  text-align:center;
+  padding:25px 0 8px;
+}
+
+.prof-head .avatar{
+  width:72px;
+  height:72px;
+  margin:0 auto 8px;
+  font-size:26px;
+}
+
+.toast{
+  position:fixed;
+  bottom:92px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#16243a;
+  border:1px solid var(--accent);
+  color:var(--text);
+  padding:12px 18px;
+  border-radius:14px;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:50;
+  width:max-content;
+  max-width:340px;
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+}
+
+@media(max-width:350px){
+
+  .balance-card h1{
+    font-size:29px;
+  }
+
+  .quick p{
+    font-size:8px;
+  }
+
+  .quick .ic{
+    font-size:18px;
+  }
+
+  .invite button{
+    padding:8px 9px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="demo-banner">
+⚠ DEMO VERSION — کوئی اصلی پیسہ نہیں / NO REAL MONEY — DISPLAY ONLY ⚠
+</div>
+
+<!-- HOME -->
+
+<div class="page active" id="page-home">
+
+<header>
+
+<div class="user">
+
+<div class="avatar">D</div>
+
+<div>
+<h2>Good morning, demo_user 👋</h2>
+<p>Here's your portfolio overview</p>
+</div>
+
+</div>
+
+<div class="bell" onclick="toast('کوئی نئی نوٹیفکیشن نہیں (ڈیمو)')">
+🔔
+</div>
+
+</header>
+
+
+<!-- BALANCE -->
+
+<div class="balance-card">
+
+<div class="balance-top">
+
+<span class="balance-label">
+TOTAL BALANCE
+</span>
+
+<button class="eye" onclick="toggleBalance()">
+👁
+</button>
+
+</div>
+
+<h1 id="balance">
+Rs 12,450
+</h1>
+
+<span class="sub">
+Available Balance • Demo
+</span>
+
+<div class="bal-btns">
+
+<button
+class="btn-dep"
+onclick="toast('یہ ڈیمو ہے — اصلی ڈپازٹ دستیاب نہیں')">
++ Deposit
+</button>
+
+<button
+class="btn-wd"
+onclick="toast('یہ ڈیمو ہے — اصلی withdrawal دستیاب نہیں')">
+↑ Withdraw
+</button>
+
+</div>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="stat-label">
+Invested
+</div>
+
+<div class="stat-value">
+Rs 8,000
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Total Earnings
+</div>
+
+<div class="stat-value green">
++ Rs 1,250
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ACTIVE INVESTMENT -->
+
+<div class="section">
+
+<div class="section-head">
+
+<h3>
+Active Investment
+</h3>
+
+<span>
+Demo data
+</span>
+
+</div>
+
+
+<div class="invest-card">
+
+<div class="invest-top">
+
+<div>
+
+<div class="invest-title">
+Growth Plan
+</div>
+
+<div class="invest-sub">
+60-day demonstration plan
+</div>
+
+</div>
+
+<div class="active-badge">
+ACTIVE
+</div>
+
+</div>
+
+
+<div class="invest-money">
+
+<div>
+
+<small>
+Investment
+</small>
+
+<b>
+Rs 2,000
+</b>
+
+</div>
+
+
+<div style="text-align:right">
+
+<small>
+Progress
+</small>
+
+<b>
+71%
+</b>
+
+</div>
+
+</div>
+
+
+<div class="progress">
+<span></span>
+</div>
+
+
+<div class="progress-info">
+
+<span>
+17 days completed
+</span>
+
+<span>
+43 days remaining
+</span>
+
+</div>
+
+
+<div class="invest-bottom">
+
+<div class="invest-mini">
+
+<small>
+Next Demo Profit
+</small>
+
+<b>
+Rs 120
+</b>
+
+</div>
+
+
+<div class="invest-mini">
+
+<small>
+Demo Maturity
+</small>
+
+<b>
+12 Oct 2026
+</b>
+
+</div>
+
+</div>
+
+
+<button
+class="view-invest"
+onclick="go('plans')">
+View Investment Details →
+</button>
+
+</div>
+
+</div>
+
+
+<!-- QUICK ACTIONS -->
+
+<div class="section">
+
+<div class="section-head">
+
+<h3>
+Quick Actions
+</h3>
+
+</div>
+
+
+<div class="quick-grid">
+
+<div class="quick" onclick="go('plans')">
+<div class="ic">📈</div>
+<p>Invest</p>
+</div>
+
+<div class="quick" onclick="toast('Wallet demo feature')">
+<div class="ic">💳</div>
+<p>Wallet</p>
+</div>
+
+<div class="quick" onclick="toast('Transaction history demo')">
+<div class="ic">🕘</div>
+<p>History</p>
+</div>
+
+<div class="quick" onclick="go('rewards')">
+<div class="ic">🎁</div>
+<p>Rewards</p>
+</div>
+
+<div class="quick" onclick="toast('Support demo feature')">
+<div class="ic">💬</div>
+<p>Support</p>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- RECENT ACTIVITY -->
+
+<div class="section">
+
+<div class="section-head">
+
+<h3>
+Recent Activity
+</h3>
+
+<span>
+View all →
+</span>
+
+</div>
+
+
+<div class="activity-card">
+
+<div class="activity">
+
+<div class="activity-icon">
+⬇
+</div>
+
+<div class="activity-info">
+
+<b>
+Deposit
+</b>
+
+<small>
+Today • 10:32 AM
+</small>
+
+</div>
+
+<div class="activity-amount">
+
+<b>
+Rs 1,000
+</b>
+
+<small class="pos">
+Approved
+</small>
+
+</div>
+
+</div>
+
+
+<div class="activity">
+
+<div class="activity-icon">
+📈
+</div>
+
+<div class="activity-info">
+
+<b>
+Profit
+</b>
+
+<small>
+Yesterday • 08:15 PM
+</small>
+
+</div>
+
+<div class="activity-amount">
+
+<b class="pos">
++ Rs 120
+</b>
+
+<small class="pos">
+Credited
+</small>
+
+</div>
+
+</div>
+
+
+<div class="activity">
+
+<div class="activity-icon">
+⬆
+</div>
+
+<div class="activity-info">
+
+<b>
+Withdrawal
+</b>
+
+<small>
+Aug 17 • 04:40 PM
+</small>
+
+</div>
+
+<div class="activity-amount">
+
+<b>
+Rs 500
+</b>
+
+<small class="pending">
+Pending
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- INVITE -->
+
+<div class="invite">
+
+<div class="gift">
+🎁
+</div>
+
+<div class="invite-text">
+
+<b>
+Invite & Earn
+</b>
+
+<small>
+Referral rewards according to program terms
+</small>
+
+</div>
+
+<button onclick="go('rewards')">
+Invite
+</button>
+
+</div>
+
+
+<!-- PLANS -->
+
+<div class="plans-link">
+
+<div>
+
+<strong>
+Explore Investment Plans
+</strong>
+
+<small>
+View available demonstration plans
+</small>
+
+</div>
+
+<button onclick="go('plans')">
+View Plans →
+</button>
+
+</div>
+
+</div>
+
+
+<!-- PLANS PAGE -->
+
+<div class="page" id="page-plans">
+
+<header>
+
+<div class="user">
+
+<div class="avatar">
+📈
+</div>
+
+<div>
+
+<h2>
+Investment Plans
+</h2>
+
+<p>
+Demo plans — fake data
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+
+<div class="plan">
+
+<h4>
+Starter Plan
+</h4>
+
+<div class="price">
+Rs 500
+</div>
+
+<ul>
+
+<li>
+Duration: 30 days
+</li>
+
+<li>
+Daily demo return shown
+</li>
+
+<li>
+Demo only
+</li>
+
+</ul>
+
+<button onclick="toast('یہ ڈیمو ہے — اصلی پلان خریداری دستیاب نہیں')">
+View Demo Plan
+</button>
+
+</div>
+
+
+<div class="plan">
+
+<div class="tag">
+POPULAR
+</div>
+
+<h4>
+Growth Plan
+</h4>
+
+<div class="price">
+Rs 2,000
+</div>
+
+<ul>
+
+<li>
+Duration: 60 days
+</li>
+
+<li>
+Daily demo return shown
+</li>
+
+<li>
+Priority support
+</li>
+
+</ul>
+
+<button onclick="toast('یہ ڈیمو ہے — اصلی پلان خریداری دستیاب نہیں')">
+View Demo Plan
+</button>
+
+</div>
+
+
+<div class="plan">
+
+<h4>
+Premium Plan
+</h4>
+
+<div class="price">
+Rs 10,000
+</div>
+
+<ul>
+
+<li>
+Duration: 90 days
+</li>
+
+<li>
+Daily demo return shown
+</li>
+
+<li>
+Dedicated manager
+</li>
+
+</ul>
+
+<button onclick="toast('یہ ڈیمو ہے — اصلی پلان خریداری دستیاب نہیں')">
+View Demo Plan
+</button>
+
+</div>
+
+</div>
+
+
+<!-- REWARDS -->
+
+<div class="page" id="page-rewards">
+
+<header>
+
+<div class="user">
+
+<div class="avatar">
+🎁
+</div>
+
+<div>
+
+<h2>
+Rewards
+</h2>
+
+<p>
+Referral demo data
+</p>
+
+</div>
+
+</div>
+
+</header>
+
+
+<div class="card">
+
+<h3>
+Team Summary
+</h3>
+
+<div class="sum-row">
+
+<div class="sum-item">
+
+<div class="ic">
+🙋
+</div>
+
+<small>
+Direct Invites
+</small>
+
+<b>
+12
+</b>
+
+</div>
+
+
+<div class="sum-item">
+
+<div class="ic">
+🌐
+</div>
+
+<small>
+Team Size
+</small>
+
+<b>
+38
+</b>
+
+</div>
+
+
+<div class="sum-item">
+
+<div class="ic">
+🎁
+</div>
+
+<small>
+Commission
+</small>
+
+<b>
+Rs 734
+</b>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>
+Your Referral Link
+</h3>
+
+<div style="
+background:var(--card2);
+border:1px dashed var(--line);
+border-radius:10px;
+padding:12px;
+font-size:11px;
+color:var(--muted);
+word-break:break-all;
+">
+
+https://demo.example/ref/demo_user
+
+</div>
+
+<button
+class="btn-dep"
+style="
+width:100%;
+margin-top:10px;
+padding:11px;
+border-radius:12px;
+border:none;
+font-weight:800;
+"
+onclick="toast('لنک کاپی ہو گیا (ڈیمو)')">
+
+Copy Referral Link
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="page" id="page-profile">
+
+<div class="prof-head">
+
+<div class="avatar">
+D
+</div>
+
+<h2>
+demo_user
+</h2>
+
+<p style="
+color:var(--muted);
+font-size:12px;
+margin-top:3px;
+">
+demo@example.com
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="menu-item"
+onclick="toast('ڈیمو فیچر')">
+
+👤 Edit Profile
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+
+<div class="menu-item"
+onclick="toast('ڈیمو فیچر')">
+
+🔒 Change Password
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+
+<div class="menu-item"
+onclick="toast('ڈیمو فیچر')">
+
+🪪 KYC Verification
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+
+<div class="menu-item"
+onclick="toast('ڈیمو فیچر')">
+
+📜 Transaction History
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+
+<div class="menu-item"
+onclick="toast('ڈیمو فیچر')">
+
+📞 Support
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+
+<div class="menu-item"
+style="color:var(--danger)"
+onclick="toast('ڈیمو لاگ آؤٹ')">
+
+🚪 Logout
+
+<span class="arr">
+›
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom">
+
+<button
+class="active"
+data-p="home"
+onclick="go('home')">
+
+<span class="ic">
+🏠
+</span>
+
+Home
+
+</button>
+
+
+<button
+data-p="plans"
+onclick="go('plans')">
+
+<span class="ic">
+📈
+</span>
+
+Invest
+
+</button>
+
+
+<button
+data-p="wallet"
+onclick="toast('Wallet screen — next rebuild')">
+
+<span class="ic">
+💳
+</span>
+
+Wallet
+
+</button>
+
+
+<button
+data-p="rewards"
+onclick="go('rewards')">
+
+<span class="ic">
+🎁
+</span>
+
+Rewards
+
+</button>
+
+
+<button
+data-p="profile"
+onclick="go('profile')">
+
+<span class="ic">
+👤
+</span>
+
+Profile
+
+</button>
+
+</nav>
+
+
+<div class="toast" id="toast"></div>
+
+</div>
+
+
+<script>
+
+function go(page){
+
+document
+.querySelectorAll('.page')
+.forEach(el =>
+el.classList.remove('active')
+);
+
+const target =
+document.getElementById('page-' + page);
+
+if(target){
+target.classList.add('active');
+}
+
+document
+.querySelectorAll('nav.bottom button')
+.forEach(btn => {
+
+btn.classList.toggle(
+'active',
+btn.dataset.p === page
+);
+
+});
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+
+let toastTimer;
+
+function toast(message){
+
+const element =
+document.getElementById('toast');
+
+element.textContent =
+message;
+
+element.classList.add('show');
+
+clearTimeout(toastTimer);
+
+toastTimer =
+setTimeout(() => {
+
+element.classList.remove('show');
+
+},2600);
+
+}
+
+
+let balanceVisible = true;
+
+function toggleBalance(){
+
+const balance =
+document.getElementById('balance');
+
+balanceVisible =
+!balanceVisible;
+
+balance.textContent =
+balanceVisible
+? 'Rs 12,450'
+: '••••••••';
+
+}
+
+</script>
+
+</body>
+  </html>
