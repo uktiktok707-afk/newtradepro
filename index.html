@@ -1,224 +1,389 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: #0d1024;
-            color: #fff;
-            padding: 15px;
-            padding-bottom: 90px;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 15px;
-            backdrop-filter: blur(10px);
-        }
-        .balance-card {
-            text-align: center;
-        }
-        .balance-card p {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-        .balance-card h2 {
-            font-size: 32px;
-            font-weight: 700;
-            margin: 8px 0 15px;
-        }
-        .action-btns {
-            display: flex;
-            gap: 10px;
-        }
-        .btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            text-align: center;
-        }
-        .menu-item {
-            background: rgba(255,255,255,0.05);
-            padding: 12px 5px;
-            border-radius: 14px;
-            font-size: 11px;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .menu-item i {
-            font-size: 18px;
-            display: block;
-            margin-bottom: 6px;
-            color: #4cd964;
-        }
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        .sum-box {
-            background: rgba(255,255,255,0.05);
-            padding: 12px 8px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #4cd964;
-        }
-        .invite-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .invite-btn {
-            background: #4cd964;
-            color: #000;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 12px;
-            border: none;
-        }
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 410px;
-            background: rgba(5, 45, 20, 0.95);
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 25px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            backdrop-filter: blur(15px);
-        }
-        .nav-item {
-            text-align: center;
-            color: rgba(255,255,255,0.7);
-            font-size: 10px;
-            text-decoration: none;
-        }
-        .nav-item i {
-            font-size: 16px;
-            display: block;
-            margin-bottom: 2px;
-        }
-        .nav-item.active {
-            color: #fff;
-        }
-        .center-btn {
-            background: #4cd964;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-size: 18px;
-            margin-top: -22px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            text-decoration: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthGrow — Pro Trading Dashboard</title>
+<!-- Chart.js CDN for Live Trading Graph -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',system-ui,sans-serif;
+}
+
+:root{
+  --bg:#08111f;
+  --card:#111d31;
+  --card2:#18263e;
+  --line:#263754;
+  --accent:#34d399;
+  --blue:#0ea5e9;
+  --gold:#fbbf24;
+  --text:#edf4ff;
+  --muted:#8fa3c7;
+  --danger:#f87171;
+}
+
+body{
+  background:#050b14;
+  color:var(--text);
+  min-height:100vh;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:0 auto;
+  padding-bottom:90px;
+  position:relative;
+  background: linear-gradient(180deg, #0e1930 0%, #08111f 100%);
+}
+
+/* LIVE CRYPTO TICKER */
+.ticker-bar {
+  background: #060d1a;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  border-bottom: 1px solid var(--line);
+}
+.ticker-item { display: flex; gap: 6px; align-items: center; }
+.up { color: var(--accent); font-weight: bold; }
+.down { color: var(--danger); font-weight: bold; }
+
+/* HEADER */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:15px 18px 8px;
+}
+.user{ display:flex; align-items:center; gap:10px; }
+.avatar{
+  width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, var(--accent), var(--blue));
+  color:#052e22; font-weight:900;
+}
+header h2{ font-size:16px; }
+header p{ color:var(--muted); font-size:11px; }
+
+/* BALANCE CARD */
+.balance-card{
+  margin:12px 16px; padding:20px; border-radius:20px;
+  background: linear-gradient(135deg, #134e4a, #065f46 55%, #0f766e);
+  border:1px solid #2dd4a755;
+  box-shadow: 0 10px 30px #0007;
+}
+.balance-top{ display:flex; align-items:center; justify-content:space-between; }
+.balance-label{ color:#a7f3d0; font-size:11px; font-weight:700; }
+.eye{ border:0; background:#ffffff15; color:#fff; border-radius:8px; padding:4px 8px; cursor:pointer; }
+.balance-card h1{ font-size:32px; margin:6px 0 2px; }
+.bal-btns{ display:flex; gap:10px; margin-top:15px; }
+.bal-btns button{
+  flex:1; padding:12px; border-radius:12px; font-size:13px; font-weight:800; cursor:pointer; border:0;
+}
+.btn-dep{ background:#ecfdf5; color:#065f46; }
+.btn-wd{ background:#064e3b88; color:#d1fae5; border:1px solid #34d39966 !important; }
+
+/* CARDS & GRAPH */
+.card{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:18px; margin:12px 16px; padding:16px;
+}
+.card h3{ display:flex; align-items:center; justify-content:space-between; font-size:14px; margin-bottom:12px; }
+
+/* MODALS (POPUPS) */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: none; align-items: center; justify-content: center;
+  z-index: 300; backdrop-filter: blur(5px);
+}
+.modal-card {
+  background: var(--card); border: 1px solid var(--line);
+  width: 90%; max-width: 380px; border-radius: 20px; padding: 20px;
+}
+.modal-card h3 { font-size: 16px; margin-bottom: 12px; }
+.input-group { margin-bottom: 14px; }
+.input-group label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+.input-group input, .input-group select {
+  width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--card2); color: #fff; font-size: 13px; outline: none;
+}
+.modal-btns { display: flex; gap: 10px; margin-top: 15px; }
+.modal-btns button {
+  flex: 1; padding: 10px; border-radius: 10px; border: 0; font-weight: bold; cursor: pointer;
+}
+.btn-submit { background: var(--accent); color: #000; }
+.btn-cancel { background: var(--card2); color: var(--muted); }
+
+/* TABLE */
+table{ width:100%; border-collapse:collapse; font-size:11px; }
+td, th{ text-align:left; padding:8px 4px; border-bottom:1px solid var(--line); }
+th{ color:var(--muted); font-size:10px; }
+.pos{ color:var(--accent); font-weight: bold; }
+.neg{ color:var(--danger); font-weight: bold; }
+.badge{ padding:3px 8px; border-radius:20px; font-size:9px; }
+.b-ok{ background:#064e3b; color:#6ee7b7; }
+
+/* REFERRAL BOX */
+.referral-box{
+  background:var(--card2); border:1px dashed var(--line);
+  border-radius:10px; padding:10px; color:var(--muted); font-size:11px; text-align:center; margin-top:8px;
+}
+.copy-btn{
+  width:100%; margin-top:10px; padding:11px; border:0; border-radius:10px;
+  background:var(--gold); color:#451a03; font-weight:900; cursor:pointer;
+}
+
+/* TOAST */
+.toast{
+  position:fixed; left:50%; bottom:80px; transform: translateX(-50%) translateY(10px);
+  background:#1e293b; border:1px solid var(--accent); color:var(--text);
+  padding:10px 18px; border-radius:12px; font-size:12px; opacity:0; pointer-events:none; transition:.25s; z-index:400;
+}
+.toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <div class="user-info" style="display: flex; align-items: center; gap: 10px;">
-                <button class="icon-btn" style="background: none; border: none; color: #fff; font-size: 18px;"><i class="fa-solid fa-bars"></i></button>
-                <div class="user-details">
-                    <h4 style="font-size: 14px;">hasnain8576</h4>
-                    <p style="font-size: 11px; opacity: 0.7;">Your Dashboard</p>
-                </div>
-            </div>
-            <button class="icon-btn" style="background: none; border: none; color: #fff; font-size: 18px;"><i class="fa-solid fa-user"></i></button>
-        </div>
+<div class="app">
 
-        <!-- Balance Card -->
-        <div class="card balance-card">
-            <p>Account Balance</p>
-            <h2><i class="fa-regular fa-eye"></i> 0.0 Rs</h2>
-            <div class="action-btns">
-                <button class="btn"><i class="fa-solid fa-arrow-down"></i> Deposit</button>
-                <button class="btn"><i class="fa-solid fa-arrow-up"></i> Withdraw</button>
-            </div>
-        </div>
+<!-- LIVE TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-item">
+    <span>BTC/USDT:</span>
+    <span id="btcPrice" class="up">$64,250.00</span>
+  </div>
+  <div class="ticker-item">
+    <span>USDT/PKR:</span>
+    <span class="up">Rs 285.50</span>
+  </div>
+</div>
 
-        <!-- Quick Menu -->
-        <div class="card menu-grid">
-            <div class="menu-item"><i class="fa-solid fa-wallet"></i> Deposit</div>
-            <div class="menu-item"><i class="fa-solid fa-upload"></i> Withdraw</div>
-            <div class="menu-item"><i class="fa-solid fa-clock"></i> History</div>
-            <div class="menu-item"><i class="fa-solid fa-users"></i> My Team</div>
-            <div class="menu-item"><i class="fa-solid fa-download"></i> App Download</div>
-            <div class="menu-item"><i class="fa-brands fa-whatsapp"></i> WhatsApp Admin</div>
-            <div class="menu-item"><i class="fa-brands fa-whatsapp"></i> WhatsApp Channel</div>
-            <div class="menu-item"><i class="fa-brands fa-facebook"></i> FB Group</div>
-            <div class="menu-item"><i class="fa-solid fa-circle-info"></i> More</div>
-        </div>
-
-        <!-- Summary Grid -->
-        <div class="summary-grid">
-            <div class="sum-box">
-                <p style="font-size: 10px; color: #fff; opacity: 0.7;">Total Withdrawals</p>
-                <h3>3134 Rs</h3>
-            </div>
-            <div class="sum-box">
-                <p style="font-size: 10px; color: #fff; opacity: 0.7;">Referral Comm.</p>
-                <h3>734 Rs</h3>
-            </div>
-            <div class="sum-box">
-                <p style="font-size: 10px; color: #fff; opacity: 0.7;">Invite & Earn</p>
-                <h3>More</h3>
-            </div>
-        </div>
-
-        <!-- Invite Card -->
-        <div class="card invite-card">
-            <div>
-                <h5 style="font-size: 13px;">Invite & Earn More</h5>
-                <p style="font-size: 10px; opacity: 0.7;">Invite friends and earn exciting rewards!</p>
-            </div>
-            <button class="invite-btn">Invite</button>
-        </div>
+<header>
+  <div class="user">
+    <div class="avatar">H</div>
+    <div>
+      <h2>Mohammad Hasnain</h2>
+      <p>Pro Trader Dashboard</p>
     </div>
+  </div>
+</header>
 
-    <!-- Bottom Nav Bar -->
-    <div class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-chart-line"></i> Plans</a>
-        <a href="#" class="center-btn"><i class="fa-solid fa-border-all"></i></a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-gift"></i> Rewards</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
+<!-- BALANCE CARD -->
+<div class="balance-card">
+  <div class="balance-top">
+    <span class="balance-label">MAIN BALANCE</span>
+    <button class="eye" onclick="toggleBalance()">👁</button>
+  </div>
+  <h1 id="mainBalance">Rs 12,450</h1>
+  <div class="bal-btns">
+    <button class="btn-dep" onclick="openModal('depositModal')">⬇ Deposit</button>
+    <button class="btn-wd" onclick="openModal('withdrawModal')">⬆ Withdraw</button>
+  </div>
+</div>
+
+<!-- LIVE TRADING GRAPH -->
+<div class="card">
+  <h3>Live Market Chart <span style="color:var(--accent);">● Live Updates</span></h3>
+  <canvas id="liveChart" height="180"></canvas>
+</div>
+
+<!-- TRANSACTION HISTORY -->
+<div class="card">
+  <h3>Recent Transactions <span>Auto Update</span></h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="txHistory">
+      <tr>
+        <td>Deposit</td>
+        <td class="pos">+ Rs 1,000</td>
+        <td><span class="badge b-ok">Approved</span></td>
+      </tr>
+      <tr>
+        <td>Trading Profit</td>
+        <td class="pos">+ Rs 120</td>
+        <td><span class="badge b-ok">Credited</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- REFERRAL CARD -->
+<div class="card">
+  <h3>Referral Link</h3>
+  <div class="referral-box" id="refLink">https://wealthgrow.app/ref/hasnain8576</div>
+  <button class="copy-btn" onclick="copyReferral()">📋 Copy Referral Link</button>
+</div>
+
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="modal-overlay" id="depositModal">
+  <div class="modal-card">
+    <h3>Deposit Money</h3>
+    <div class="input-group">
+      <label>Payment Method</label>
+      <select id="depMethod">
+        <option>EasyPaisa</option>
+        <option>JazzCash</option>
+        <option>USDT (TRC20)</option>
+      </select>
     </div>
+    <div class="input-group">
+      <label>Amount (PKR)</label>
+      <input type="number" id="depAmount" placeholder="e.g. 2000">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('depositModal')">Cancel</button>
+      <button class="btn-submit" onclick="processDeposit()">Confirm Deposit</button>
+    </div>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal-overlay" id="withdrawModal">
+  <div class="modal-card">
+    <h3>Withdraw Money</h3>
+    <div class="input-group">
+      <label>Withdrawal Method</label>
+      <select>
+        <option>EasyPaisa</option>
+        <option>JazzCash</option>
+        <option>Bank Transfer</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label>Account Number</label>
+      <input type="text" placeholder="03XXXXXXXXX">
+    </div>
+    <div class="input-group">
+      <label>Amount (PKR)</label>
+      <input type="number" id="wdAmount" placeholder="e.g. 1000">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('withdrawModal')">Cancel</button>
+      <button class="btn-submit" onclick="processWithdraw()">Confirm Withdraw</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// State Management
+let currentBalance = 12450;
+let balanceVisible = true;
+
+// Balance Hide/Show
+function toggleBalance(){
+  balanceVisible = !balanceVisible;
+  document.getElementById('mainBalance').textContent = balanceVisible ? 'Rs ' + currentBalance.toLocaleString() : '••••••••';
+}
+
+// Modal Control
+function openModal(id){ document.getElementById(id).style.display = 'flex'; }
+function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+
+// Toast Message
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Deposit Logic
+function processDeposit(){
+  const amt = parseFloat(document.getElementById('depAmount').value);
+  if(!amt || amt <= 0){ showToast('Meharbani karke sahi amount likhein!'); return; }
+  
+  currentBalance += amt;
+  document.getElementById('mainBalance').textContent = 'Rs ' + currentBalance.toLocaleString();
+  
+  // Add to History
+  const row = `<tr><td>Deposit</td><td class="pos">+ Rs ${amt.toLocaleString()}</td><td><span class="badge b-ok">Approved</span></td></tr>`;
+  document.getElementById('txHistory').insertAdjacentHTML('afterbegin', row);
+  
+  closeModal('depositModal');
+  showToast('Deposit kamyab ho gaya!');
+  document.getElementById('depAmount').value = '';
+}
+
+// Withdraw Logic
+function processWithdraw(){
+  const amt = parseFloat(document.getElementById('wdAmount').value);
+  if(!amt || amt <= 0){ showToast('Sahi amount darj karein!'); return; }
+  if(amt > currentBalance){ showToast('Balance kam hai!'); return; }
+  
+  currentBalance -= amt;
+  document.getElementById('mainBalance').textContent = 'Rs ' + currentBalance.toLocaleString();
+  
+  // Add to History
+  const row = `<tr><td>Withdrawal</td><td class="neg">- Rs ${amt.toLocaleString()}</td><td><span class="badge b-ok">Processing</span></td></tr>`;
+  document.getElementById('txHistory').insertAdjacentHTML('afterbegin', row);
+  
+  closeModal('withdrawModal');
+  showToast('Withdrawal request bhej di gayi hai!');
+  document.getElementById('wdAmount').value = '';
+}
+
+// Referral Copy
+function copyReferral(){
+  const text = document.getElementById('refLink').textContent;
+  navigator.clipboard.writeText(text);
+  showToast('Referral Link copy ho gaya hai!');
+}
+
+// CHART.JS REALTIME GRAPH
+const ctx = document.getElementById('liveChart').getContext('2d');
+const liveChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['10:00', '10:05', '10:10', '10:15', '10:20', '10:25'],
+    datasets: [{
+      label: 'BTC Trend',
+      data: [64100, 64150, 64120, 64200, 64180, 64250],
+      borderColor: '#34d399',
+      backgroundColor: 'rgba(52, 211, 153, 0.1)',
+      fill: true,
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: '#263754' }, ticks: { color: '#8fa3c7' } },
+      y: { grid: { color: '#263754' }, ticks: { color: '#8fa3c7' } }
+    }
+  }
+});
+
+// Live Price Ticker Simulation
+setInterval(() => {
+  const change = (Math.random() - 0.48) * 50;
+  const newPrice = Math.round(64250 + change);
+  document.getElementById('btcPrice').textContent = '$' + newPrice.toLocaleString();
+  
+  // Update Chart
+  liveChart.data.datasets[0].data.shift();
+  liveChart.data.datasets[0].data.push(newPrice);
+  liveChart.update();
+}, 3000);
+</script>
 </body>
 </html>
