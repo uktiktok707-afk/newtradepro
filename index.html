@@ -995,7 +995,160 @@ th{
 </head>
 
 <body>
+<!-- ================= AUTH SCREEN ================= -->
 
+<section id="auth-screen" class="auth-screen">
+
+    <div class="auth-box">
+
+        <div class="auth-logo">
+            NT
+        </div>
+
+        <h1>Welcome to NewTradePro</h1>
+
+        <p class="auth-subtitle">
+            Your professional trading dashboard
+        </p>
+
+        <div id="login-form">
+
+            <div class="auth-title">
+                Login to your account
+            </div>
+
+            <div class="auth-input">
+                <i class="fa-solid fa-user"></i>
+                <input
+                    type="text"
+                    id="loginUser"
+                    placeholder="Email or Phone"
+                >
+            </div>
+
+            <div class="auth-input">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    id="loginPassword"
+                    placeholder="Password"
+                >
+
+                <button
+                    type="button"
+                    onclick="togglePassword('loginPassword')"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+
+            </div>
+
+            <button
+                class="auth-btn"
+                onclick="demoLogin()"
+            >
+                Login
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <p class="auth-switch">
+                Don't have an account?
+
+                <button onclick="showRegister()">
+                    Create Account
+                </button>
+            </p>
+
+        </div>
+
+        <div id="register-form" style="display:none;">
+
+            <div class="auth-title">
+                Create your account
+            </div>
+
+            <div class="auth-input">
+                <i class="fa-solid fa-user"></i>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Full Name"
+                >
+            </div>
+
+            <div class="auth-input">
+                <i class="fa-solid fa-phone"></i>
+
+                <input
+                    type="tel"
+                    id="registerPhone"
+                    placeholder="03XXXXXXXXX"
+                >
+            </div>
+
+            <div class="auth-input">
+                <i class="fa-solid fa-envelope"></i>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="Email Address"
+                >
+            </div>
+
+            <div class="auth-input">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Create Password"
+                >
+
+                <button
+                    type="button"
+                    onclick="togglePassword('registerPassword')"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+
+            </div>
+
+            <button
+                class="auth-btn"
+                onclick="demoRegister()"
+            >
+                Create Account
+                <i class="fa-solid fa-user-plus"></i>
+            </button>
+
+            <p class="auth-switch">
+
+                Already have an account?
+
+                <button onclick="showLogin()">
+                    Login
+                </button>
+
+            </p>
+
+        </div>
+
+        <div class="auth-demo">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            Sandbox / Demo Authentication
+
+        </div>
+
+    </div>
+
+</section>
 <div class="app">
 
 <!-- DEMO WARNING -->
